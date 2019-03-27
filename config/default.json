@@ -1,0 +1,15 @@
+{
+    "mongo-db": {
+        "name": "heroku_wbn1nfjm",
+        "host": "ds125616.mlab.com",
+        "port": 25616
+    },
+    "postgres-db": {
+        "name": "d1ai7rcgb2k54k",
+        "host": "ec2-54-221-236-144.compute-1.amazonaws.com",
+        "port": 5432
+    },
+    "token" : {
+        "expiresIn": 21600
+    }
+}

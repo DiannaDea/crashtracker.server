@@ -1,0 +1,17 @@
+{
+    "app": {
+        "host": "APP_HOST",
+        "port": "APP_PORT"
+    },
+    "mongo-db": {
+        "user": "MONGO_DB_USER",
+        "password": "MONGO_DB_PASSWORD"
+    },
+    "postgres-db": {
+        "user": "POSTGRES_DB_USER",
+        "password": "POSTGRES_DB_PASSWORD"
+    },
+    "token": {
+        "secret": "TOKEN_SECRET"
+    }
+}
