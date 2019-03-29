@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "db:mingrate:up": "./node_modules/.bin/sequelize db:migrate",
+    "db:mingrate:down": "./node_modules/.bin/sequelize db:migrate:undo:all"
   },
   "author": "",
   "license": "ISC",
