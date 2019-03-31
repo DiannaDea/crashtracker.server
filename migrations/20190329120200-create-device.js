@@ -4,9 +4,9 @@ module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.createTable('Devices', {
     id: {
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
-      type: Sequelize.INTEGER,
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
     },
     name: {
       type: Sequelize.STRING,
@@ -41,13 +41,24 @@ module.exports = {
         max: Object.keys(deviceStatuses).sort((a, b) => b - a)[0],
       },
     },
+    userId: {
+      type: Sequelize.UUID,
+      references: {
+        model: 'Users',
+        key: 'id',
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL',
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE,
+      default: Sequelize.NOW,
     },
     updatedAt: {
       allowNull: false,
       type: Sequelize.DATE,
+      default: Sequelize.NOW,
     },
   }),
   down: queryInterface => queryInterface.dropTable('Devices'),

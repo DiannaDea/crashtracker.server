@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     type: {
       type: DataTypes.ENUM,
       values: deviceTypes,
+      allowNull: false,
     },
     model: DataTypes.STRING,
     description: DataTypes.STRING,
@@ -16,35 +17,38 @@ module.exports = (sequelize, DataTypes) => {
     serviceInterval: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      default: 30,
+      defaultValue: 30,
     },
     dateLastService: {
       type: DataTypes.DATEONLY,
-      default: DataTypes.NOW,
+      defaultValue: DataTypes.NOW,
+      allowNull: false,
     },
     // percent of serviceInterval
     notifyBeforeService: {
       type: DataTypes.FLOAT,
-      default: 15,
+      defaultValue: 15,
     },
     status: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      defaultValue: 1,
       validate: {
-        min: Object.keys(deviceStatuses).sort((a, b) => a - b)[0],
-        max: Object.keys(deviceStatuses).sort((a, b) => b - a)[0],
+        min: parseInt(Object.keys(deviceStatuses).sort((a, b) => a - b)[0], 10),
+        max: parseInt(Object.keys(deviceStatuses).sort((a, b) => b - a)[0], 10),
       },
     },
   }, {});
 
   Device.associate = (models) => {
     models.Device.belongsTo(models.User, {
-      onDelete: 'CASCADE',
-      foreignKey: {
-        allowNull: false,
-      },
+      foreignKey: 'userId',
+      targetKey: 'id',
     });
-    models.Device.hasMany(models.SectorTracker);
+    models.Device.hasMany(models.SectorTracker, {
+      foreignKey: 'deviceId',
+      sourceKey: 'id',
+    });
   };
 
   return Device;

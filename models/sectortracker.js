@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const SectorTracker = sequelize.define('Sector', {
+  const SectorTracker = sequelize.define('SectorTracker', {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -19,7 +19,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.FLOAT,
       allowNull: false,
     },
-    trackerSetupDate: DataTypes.DATEONLY,
+    trackerSetupDate: {
+      type: DataTypes.DATEONLY,
+      defaultValue: DataTypes.NOW,
+      allowNull: false,
+    },
     // in minutes
     maxTimeExcess: {
       type: DataTypes.INTEGER,
@@ -28,10 +32,9 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
 
   SectorTracker.associate = (models) => {
-    models.Sector.belongsTo(models.Device, {
-      foreignKey: {
-        allowNull: false,
-      },
+    models.SectorTracker.belongsTo(models.Device, {
+      foreignKey: 'deviceId',
+      targetKey: 'id',
     });
   };
 

@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
-    "db:mingrate:up": "./node_modules/.bin/sequelize db:migrate",
-    "db:mingrate:down": "./node_modules/.bin/sequelize db:migrate:undo:all"
+    "db:migrate:up": "./node_modules/.bin/sequelize db:migrate",
+    "db:migrate:down": "./node_modules/.bin/sequelize db:migrate:undo:all",
+    "db:seed:all": "./node_modules/.bin/sequelize db:seed:all",
+    "db:seed:all:undo": "./node_modules/.bin/sequelize db:seed:undo:all"
   },
   "author": "",
   "license": "ISC",
@@ -19,7 +21,9 @@
     "koa-logger": "^3.2.0",
     "koa-respond": "^2.1.0",
     "koa-static": "^5.0.0",
+    "lodash.omit": "^4.5.0",
     "mongoose": "^5.4.20",
+    "node-uuid": "^1.4.8",
     "pg": "^7.9.0",
     "pg-hstore": "^2.3.2",
     "sequelize": "^5.2.1",

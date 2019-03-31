@@ -1,0 +1,13 @@
+POST http://localhost:8000/api/devices
+Content-Type: application/json
+
+{
+  "userId": "43954c12-552f-4f52-8523-4d38bb8f6389",
+  "name": "Device 1",
+  "type": "fridge",
+  "model": "LA 39995",
+  "description": "Cool",
+  "serviceInterval": 30,
+  "dateLastService": "Fri Oct 19 2018 19:27:28",
+  "notifyBeforeService": 20
+}
