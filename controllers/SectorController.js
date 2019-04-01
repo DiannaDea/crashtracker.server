@@ -27,6 +27,12 @@ const SectorController = {
 
     return ctx.send(200, sector);
   },
+  getAll: async (ctx) => {
+    const sectors = await SectorProvider.findAllByParams();
+    if (!sectors || !sectors.length) throw new errors.ClientError('No sectors');
+
+    return ctx.send(200, sectors);
+  },
 };
 
 module.exports = SectorController;

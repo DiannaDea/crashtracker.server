@@ -13,6 +13,7 @@ sectorTrackerRouter.route({
     body: {
       deviceId: Joi.string().required(),
       sectorTrackers: Joi.array().items(Joi.object({
+        uuid: Joi.string().required(),
         name: Joi.string().required(),
         number: Joi.number().required(),
         location: Joi.string(),
@@ -25,6 +26,12 @@ sectorTrackerRouter.route({
     type: 'json',
   },
   handler: SectorController.create,
+});
+
+sectorTrackerRouter.route({
+  method: 'get',
+  path: '/',
+  handler: SectorController.getAll,
 });
 
 sectorTrackerRouter.route({
