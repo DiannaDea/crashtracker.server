@@ -1,0 +1,32 @@
+# create sectors
+POST http://localhost:8000/api/sectors
+Content-Type: application/json
+
+{
+  "deviceId": "62e1f9b0-b19e-4d56-b388-935ca81fceb6",
+  "sectorTrackers": [
+    {
+      "name": "Sector 1",
+      "number": 1,
+      "location": "Kitchen",
+      "maxTemperature": 150,
+      "minTemperature": 10,
+      "trackerSetupDate": "Fri Oct 19 2018 19:27:28",
+      "maxTimeExcess": 500
+    },
+    {
+      "name": "Sector 2",
+      "number": 2,
+      "location": "Kitchen",
+      "maxTemperature": 120,
+      "minTemperature": 50,
+      "trackerSetupDate": "Fri Oct 11 2018 19:27:28",
+      "maxTimeExcess": 240
+    }
+  ]
+}
+
+###
+
+# get one sector
+GET http://localhost:8000/api/sectors/39f63991-2209-452e-b3d7-b57f21b0a88c

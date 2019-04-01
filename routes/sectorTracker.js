@@ -1,5 +1,5 @@
 const router = require('koa-joi-router');
-const SectorTrackerController = require('../controllers/SectorTrackerController');
+const SectorController = require('../controllers/SectorController');
 
 const sectorTrackerRouter = router();
 const { Joi } = router;
@@ -11,8 +11,8 @@ sectorTrackerRouter.route({
   path: '/',
   validate: {
     body: {
+      deviceId: Joi.string().required(),
       sectorTrackers: Joi.array().items(Joi.object({
-        deviceId: Joi.number().required(),
         name: Joi.string().required(),
         number: Joi.number().required(),
         location: Joi.string(),
@@ -24,7 +24,18 @@ sectorTrackerRouter.route({
     },
     type: 'json',
   },
-  handler: SectorTrackerController.create,
+  handler: SectorController.create,
+});
+
+sectorTrackerRouter.route({
+  method: 'get',
+  path: '/:id',
+  validate: {
+    params: {
+      id: Joi.string().required(),
+    },
+  },
+  handler: SectorController.getOne,
 });
 
 module.exports = sectorTrackerRouter;

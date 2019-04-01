@@ -4,8 +4,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    // for iot server
-    uuid: DataTypes.STRING,
     number: {
       type: DataTypes.INTEGER,
       allowNull: false,

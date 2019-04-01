@@ -27,4 +27,26 @@ deviceRouter.route({
   handler: DeviceController.create,
 });
 
+deviceRouter.route({
+  method: 'get',
+  path: '/:id/sectors',
+  validate: {
+    params: {
+      id: Joi.string().required(),
+    },
+  },
+  handler: DeviceController.getAllSectors,
+});
+
+deviceRouter.route({
+  method: 'get',
+  path: '/:id',
+  validate: {
+    params: {
+      id: Joi.string().required(),
+    },
+  },
+  handler: DeviceController.getOne,
+});
+
 module.exports = deviceRouter;

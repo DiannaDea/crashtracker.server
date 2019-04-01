@@ -14,6 +14,16 @@ const DeviceProvider = {
 
     return device;
   },
+  checkIfExists: async id => Device.findOne({
+    where: {
+      id,
+    },
+  }),
+  findAllByParams: async deviceParams => Device.findAll({
+    where: {
+      ...deviceParams,
+    },
+  }),
 };
 
 module.exports = DeviceProvider;
