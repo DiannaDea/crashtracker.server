@@ -12,9 +12,9 @@ const SectorProvider = {
       status: parseInt(Object.keys(sectorStatuses).sort((a, b) => a - b)[0], 10),
     });
   },
-  checkIfExists: id => SectorTracker.findOne({
+  checkIfExists: sectorParams => SectorTracker.findOne({
     where: {
-      id,
+      ...sectorParams,
     },
   }),
   findAllByParams: sectorParams => SectorTracker.findAll({

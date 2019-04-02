@@ -8,10 +8,10 @@ sectorTrackerRouter.prefix('/api/sectors');
 
 sectorTrackerRouter.route({
   method: 'post',
-  path: '/:id/critical',
+  path: '/:uuid/critical',
   validate: {
     params: {
-      id: Joi.string().required(),
+      uuid: Joi.string().required(),
     },
     body: {
       timeExcess: Joi.number().required(),

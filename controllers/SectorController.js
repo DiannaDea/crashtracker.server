@@ -29,7 +29,7 @@ const SectorController = {
   getOne: async (ctx) => {
     const { id } = ctx.params;
 
-    const sector = await SectorProvider.checkIfExists(id);
+    const sector = await SectorProvider.checkIfExists({ id });
     if (!sector) throw new errors.ClientError(`No sector with such id: ${id}`);
 
     return ctx.send(200, sector);
@@ -41,11 +41,13 @@ const SectorController = {
     return ctx.send(200, sectors);
   },
   setCriticalSituation: async (ctx) => {
-    const { id } = ctx.params;
+    const { uuid } = ctx.params;
     const { timeExcess } = ctx.request.body;
 
-    const sector = await SectorProvider.checkIfExists(id);
-    if (!sector) throw new errors.ClientError(`No sector with such id: ${id}`);
+    const sector = await SectorProvider.checkIfExists({ uuid });
+    if (!sector) throw new errors.ClientError(`No sector with such uuid: ${uuid}`);
+
+    const { id, deviceId } = sector;
 
     const updSector = await SectorProvider.update(id, {
       status: Object
@@ -53,10 +55,10 @@ const SectorController = {
         .find(key => sectorStatuses[key] === 'CRITICAL_SITUATION'),
     });
 
-    const device = await DeviceProvider.checkIfExists(sector.deviceId);
-    if (!device) throw new errors.ClientError(`No device with such id: ${sector.deviceId}`);
+    const device = await DeviceProvider.checkIfExists(deviceId);
+    if (!device) throw new errors.ClientError(`No device with such id: ${deviceId}`);
 
-    const updDevice = await DeviceProvider.update(sector.deviceId, {
+    const updDevice = await DeviceProvider.update(deviceId, {
       status: Object
         .keys(deviceStatuses)
         .find(key => deviceStatuses[key] === 'CRITICAL_SITUATION'),
@@ -64,7 +66,7 @@ const SectorController = {
 
     const updTrackerStatus = await TrackerStatusProvider.update(id, { timeExcess });
 
-    if (!updDevice || !updSector || !updTrackerStatus) throw new errors.ServerError(`Unable to set critical for deviceId: ${sector.id}, sectorId: ${id}`);
+    if (!updDevice || !updSector || !updTrackerStatus) throw new errors.ServerError(`Unable to set critical for deviceId: ${deviceId}, sectorId: ${id}`);
 
     ctx.send(200);
   },
