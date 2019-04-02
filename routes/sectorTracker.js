@@ -8,6 +8,21 @@ sectorTrackerRouter.prefix('/api/sectors');
 
 sectorTrackerRouter.route({
   method: 'post',
+  path: '/:id/critical',
+  validate: {
+    params: {
+      id: Joi.string().required(),
+    },
+    body: {
+      timeExcess: Joi.number().required(),
+    },
+    type: 'json',
+  },
+  handler: SectorController.setCriticalSituation,
+});
+
+sectorTrackerRouter.route({
+  method: 'post',
   path: '/',
   validate: {
     body: {

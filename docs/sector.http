@@ -35,3 +35,11 @@ GET http://localhost:8000/api/sectors/39f63991-2209-452e-b3d7-b57f21b0a88c
 
 ### get all sectors
 GET http://localhost:8000/api/sectors
+
+### set critical situation
+POST http://localhost:8000/api/sectors/4755e587-3600-4f5f-8c08-bd96862cd02f/critical
+Content-Type: application/json
+
+{
+  "timeExcess": 344
+}
