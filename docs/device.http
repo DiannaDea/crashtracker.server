@@ -22,3 +22,12 @@ GET http://localhost:8000/api/devices/62e1f9b0-b19e-4d56-b388-935ca81fceb6
 
 # get device sectors
 GET http://localhost:8000/api/devices/62e1f9b0-b19e-4d56-b388-935ca81fceb6d/sectors
+
+### set critical situation
+POST http://localhost:8000/api/devices/8bcea6c3-c7a6-4ea5-9b70-084743801ab2/critical
+Content-Type: application/json
+
+{
+  "sectorId": "4755e587-3600-4f5f-8c08-bd96862cd02f",
+  "timeExcess": 499
+}

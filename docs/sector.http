@@ -3,7 +3,7 @@ POST http://localhost:8000/api/sectors
 Content-Type: application/json
 
 {
-  "deviceId": "7d65c7f9-ae74-4b7d-a2a1-e3254f6e76dd",
+  "deviceId": "8bcea6c3-c7a6-4ea5-9b70-084743801ab2",
   "sectorTrackers": [
     {
       "name": "Sector 1",

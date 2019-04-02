@@ -1,5 +1,6 @@
 const DeviceProvider = require('../providers/DeviceProvider');
 const SectorProvider = require('../providers/SectorProvider');
+const TrackerStatusProvider = require('../providers/TrackerStatusProvider');
 const errors = require('../consts/customErrors.js');
 
 const SectorController = {
@@ -12,7 +13,12 @@ const SectorController = {
     try {
       const sectors = await Promise
         .all(sectorTrackers
-          .map(sector => SectorProvider.create({ deviceId, ...sector })));
+          .map(async (sector) => {
+            const sectorInfo = await SectorProvider.create({ deviceId, ...sector });
+            await TrackerStatusProvider.create(sectorInfo.id);
+
+            return sectorInfo;
+          }));
 
       ctx.send(200, sectors);
     } catch (error) {

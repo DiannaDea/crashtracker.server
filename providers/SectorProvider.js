@@ -4,25 +4,26 @@ const { sectorStatuses } = require('../consts/enums');
 const { SectorTracker } = require('../models');
 
 const SectorProvider = {
-  create: async (sectorParams) => {
+  create: (sectorParams) => {
     const id = uuid.v4();
-    const sector = await SectorTracker.create({
+    return SectorTracker.create({
       id,
       ...sectorParams,
       status: parseInt(Object.keys(sectorStatuses).sort((a, b) => a - b)[0], 10),
     });
-
-    return sector;
   },
-  checkIfExists: async id => SectorTracker.findOne({
+  checkIfExists: id => SectorTracker.findOne({
     where: {
       id,
     },
   }),
-  findAllByParams: async sectorParams => SectorTracker.findAll({
+  findAllByParams: sectorParams => SectorTracker.findAll({
     where: {
       ...sectorParams,
     },
+  }),
+  update: (sectorId, updParams) => SectorTracker.update(updParams, {
+    where: { id: sectorId },
   }),
 };
 

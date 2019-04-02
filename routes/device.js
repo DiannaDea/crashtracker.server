@@ -10,6 +10,22 @@ deviceRouter.prefix('/api/devices');
 
 deviceRouter.route({
   method: 'post',
+  path: '/:id/critical',
+  validate: {
+    params: {
+      id: Joi.string().required(),
+    },
+    body: {
+      sectorId: Joi.string().required(),
+      timeExcess: Joi.number().required(),
+    },
+    type: 'json',
+  },
+  handler: DeviceController.setCriticalSituation,
+});
+
+deviceRouter.route({
+  method: 'post',
   path: '/',
   validate: {
     body: {
