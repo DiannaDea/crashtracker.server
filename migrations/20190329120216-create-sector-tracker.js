@@ -1,3 +1,5 @@
+const { sectorStatuses } = require('../consts/enums');
+
 module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.createTable('SectorTrackers', {
     id: {
@@ -5,6 +7,15 @@ module.exports = {
       primaryKey: true,
       type: Sequelize.UUID,
       defaultValue: Sequelize.UUIDV4,
+    },
+    status: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 1,
+      validate: {
+        min: parseInt(Object.keys(sectorStatuses).sort((a, b) => a - b)[0], 10),
+        max: parseInt(Object.keys(sectorStatuses).sort((a, b) => b - a)[0], 10),
+      },
     },
     uuid: {
       type: Sequelize.UUID,

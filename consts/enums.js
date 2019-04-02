@@ -8,7 +8,13 @@ const deviceStatuses = {
   5: 'SERVICE_IN_PROGRESS',
 };
 
+const sectorStatuses = {
+  1: 'OK',
+  2: 'CRITICAL_SITUATION',
+};
+
 module.exports = {
   deviceTypes,
   deviceStatuses,
+  sectorStatuses,
 };
