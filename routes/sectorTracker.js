@@ -60,4 +60,19 @@ sectorTrackerRouter.route({
   handler: SectorController.getOne,
 });
 
+sectorTrackerRouter.route({
+  method: 'put',
+  path: '/temperatures',
+  validate: {
+    body: {
+      sectorTemperatures: Joi.array().items(Joi.object({
+        uuid: Joi.string().required(),
+        currentTemp: Joi.number().required(),
+      })),
+    },
+    type: 'json',
+  },
+  handler: SectorController.updateCurrentTemperatures,
+});
+
 module.exports = sectorTrackerRouter;

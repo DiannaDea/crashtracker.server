@@ -70,6 +70,21 @@ const SectorController = {
 
     ctx.send(200);
   },
+  updateCurrentTemperatures: async (ctx) => {
+    const { sectorTemperatures } = ctx.request.body;
+
+    try {
+      await Promise.all(sectorTemperatures.map(async ({ uuid, currentTemp }) => {
+        const sector = await SectorProvider.checkIfExists({ uuid });
+        if (sector) {
+          await TrackerStatusProvider.update(sector.id, { currentTemp });
+        }
+      }));
+      ctx.send(200);
+    } catch (error) {
+      throw new errors.ServerError('Error in updating temperatures', error);
+    }
+  },
 };
 
 module.exports = SectorController;
