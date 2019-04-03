@@ -46,7 +46,7 @@ sectorTrackerRouter.route({
 sectorTrackerRouter.route({
   method: 'get',
   path: '/',
-  handler: SectorController.getAll,
+  handler: SectorController.getWorkDetails,
 });
 
 sectorTrackerRouter.route({

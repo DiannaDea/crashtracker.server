@@ -1,3 +1,5 @@
+const pick = require('lodash.pick');
+
 const DeviceProvider = require('../providers/DeviceProvider');
 const SectorProvider = require('../providers/SectorProvider');
 const TrackerStatusProvider = require('../providers/TrackerStatusProvider');
@@ -33,6 +35,25 @@ const SectorController = {
     if (!sector) throw new errors.ClientError(`No sector with such id: ${id}`);
 
     return ctx.send(200, sector);
+  },
+  getWorkDetails: async (ctx) => {
+    const sectors = await SectorProvider.findAllByParams();
+    if (!sectors || !sectors.length) throw new errors.ClientError('No sectors');
+
+    const workDetails = await Promise.all(sectors.map(async (sector) => {
+      const device = await DeviceProvider.checkIfExists(sector.deviceId);
+      if (!device) throw new errors.ClientError(`No device with such id: ${sector.deviceId}`);
+
+      const { serviceInterval, notifyBeforeService } = device;
+
+      const notificationHours = Math.floor(serviceInterval / 100 * notifyBeforeService);
+
+      return {
+        ...pick(sector, ['uuid', 'maxTemperature', 'minTemperature', 'maxTimeExcess']),
+        notificationHours,
+      };
+    }));
+    ctx.send(200, workDetails);
   },
   getAll: async (ctx) => {
     const sectors = await SectorProvider.findAllByParams();

@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     model: DataTypes.STRING,
     description: DataTypes.STRING,
-    // in days
+    // in hours
     serviceInterval: {
       type: DataTypes.INTEGER,
       allowNull: false,
