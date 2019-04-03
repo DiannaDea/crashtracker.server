@@ -29,7 +29,7 @@ const SectorController = {
   getOne: async (ctx) => {
     const { id } = ctx.params;
 
-    const sector = await SectorProvider.checkIfExists({ id });
+    const sector = await SectorProvider.getOneFullInfo({ id });
     if (!sector) throw new errors.ClientError(`No sector with such id: ${id}`);
 
     return ctx.send(200, sector);
@@ -77,7 +77,10 @@ const SectorController = {
       await Promise.all(sectorTemperatures.map(async ({ uuid, currentTemp }) => {
         const sector = await SectorProvider.checkIfExists({ uuid });
         if (sector) {
-          await TrackerStatusProvider.update(sector.id, { currentTemp });
+          await TrackerStatusProvider.update(sector.id, {
+            currentTemp,
+            ...(currentTemp < sector.maxTemperature) && { timeExcess: 0 },
+          });
         }
       }));
       ctx.send(200);

@@ -9,6 +9,7 @@ const TrackerStatusProvider = {
   update: (sectorId, updParams) => TrackerStatus.update(updParams, {
     where: { sectorId },
   }),
+  checkIfExists: sectorId => TrackerStatus.findOne({ sectorId }),
 };
 
 module.exports = TrackerStatusProvider;
