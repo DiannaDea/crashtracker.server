@@ -49,6 +49,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'deviceId',
       sourceKey: 'id',
     });
+    models.Device.hasMany(models.Service, {
+      foreignKey: 'deviceId',
+      sourceKey: 'id',
+    });
   };
 
   return Device;
