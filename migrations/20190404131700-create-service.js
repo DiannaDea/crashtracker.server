@@ -27,13 +27,13 @@ module.exports = {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
-    criticalSituationsCount: {
+    criticalCount: {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
-    sectorsAvgTemperatures: {
-      type: Sequelize.INTEGER,
-      allowNull: JSON,
+    sectorsAvgTemp: {
+      type: Sequelize.FLOAT,
+      allowNull: false,
     },
     createdAt: {
       allowNull: false,

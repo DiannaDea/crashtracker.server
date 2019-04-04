@@ -1,0 +1,7 @@
+# start service
+POST http://localhost:8000/api/service/8bcea6c3-c7a6-4ea5-9b70-084743801ab2
+Content-Type: application/json
+
+{
+  "service": true,
+}

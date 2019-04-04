@@ -3,6 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     date: {
       type: DataTypes.DATEONLY,
       allowNull: false,
+      defaultValue: DataTypes.NOW,
     },
     workHoursAfterService: {
       type: DataTypes.INTEGER,
@@ -12,13 +13,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    criticalSituationsCount: {
+    criticalCount: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    sectorsAvgTemperatures: {
-      type: DataTypes.INTEGER,
-      allowNull: JSON,
+    sectorsAvgTemp: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
     },
   }, {});
 

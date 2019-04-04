@@ -23,6 +23,16 @@ module.exports = {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
+    criticalCount: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    avgTemperature: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE,

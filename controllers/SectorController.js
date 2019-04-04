@@ -86,7 +86,17 @@ const SectorController = {
         .find(key => deviceStatuses[key] === 'CRITICAL_SITUATION'),
     });
 
-    const updTrackerStatus = await TrackerStatusProvider.update(id, { timeExcess });
+    const trackerStatus = await TrackerStatusProvider.checkIfExists(id);
+    if (!trackerStatus) throw new errors.ClientError(`No trackerStatus with such id: ${trackerStatus.id}`);
+
+    // FIXME: remove !== 2 comparison
+
+    const updTrackerStatus = await TrackerStatusProvider.update(id, {
+      timeExcess,
+      criticalSituationsCount: (updSector.status !== 2)
+        ? trackerStatus + 1
+        : trackerStatus,
+    });
 
     if (!updDevice || !updSector || !updTrackerStatus) throw new errors.ServerError(`Unable to set critical for deviceId: ${deviceId}, sectorId: ${id}`);
 
