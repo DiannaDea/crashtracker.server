@@ -23,6 +23,22 @@ sectorTrackerRouter.route({
 
 sectorTrackerRouter.route({
   method: 'post',
+  path: '/:uuid/service',
+  validate: {
+    params: {
+      uuid: Joi.string().required(),
+    },
+    body: {
+      hours: Joi.number().required(),
+      minutes: Joi.number().required(),
+    },
+    type: 'json',
+  },
+  handler: SectorController.changeToService,
+});
+
+sectorTrackerRouter.route({
+  method: 'post',
   path: '/',
   validate: {
     body: {

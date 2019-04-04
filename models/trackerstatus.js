@@ -3,10 +3,12 @@ module.exports = (sequelize, DataTypes) => {
     currentTemp: {
       type: DataTypes.FLOAT,
       allowNull: false,
+      defaultValue: 0,
     },
     timeExcess: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      defaultValue: 0,
     },
   }, {});
   TrackerStatus.associate = (models) => {

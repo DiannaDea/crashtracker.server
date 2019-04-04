@@ -61,4 +61,15 @@ Content-Type: application/json
   ]
 }
 
+### set service
+POST http://localhost:8000/api/sectors/a1192bdf-c2ca-4182-baf6-e817e0f8c9ab/service
+Content-Type: application/json
+
+{
+  "hours": 200,
+  "minutes": 17
+}
+
+
+
 

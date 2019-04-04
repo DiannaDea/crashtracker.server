@@ -1,4 +1,5 @@
 const DeviceProvider = require('../providers/DeviceProvider');
+const DeviceStatusProvider = require('../providers/DeviceStatusProvider');
 const UserProvider = require('../providers/UserProvider');
 const SectorProvider = require('../providers/SectorProvider');
 const errors = require('../consts/customErrors.js');
@@ -10,10 +11,15 @@ const DeviceController = {
     const user = await UserProvider.checkIfExists(userId);
     if (!user) throw new errors.ClientError(`No user with such id: ${userId}`);
 
-    const device = await DeviceProvider.create({ userId, ...deviceParams });
-    if (!device) throw new errors.ServerError('Unable to create device');
+    try {
+      const device = await DeviceProvider.create({ userId, ...deviceParams });
+      if (!device) throw new errors.ServerError('Unable to create device');
 
-    return ctx.send(200, device);
+      await DeviceStatusProvider.create(device.id);
+      return ctx.send(200, device);
+    } catch (error) {
+      throw new errors.ServerError('Error in creting device', error);
+    }
   },
   getOne: async (ctx) => {
     const { id } = ctx.params;
