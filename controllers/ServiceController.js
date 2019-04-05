@@ -15,13 +15,13 @@ const ServiceController = {
     if (!device) throw new errors.ClientError(`No device with such id ${deviceId}`);
 
     try {
-      const updDevice = await DeviceProvider.update(deviceId, {
+      await DeviceProvider.update(deviceId, {
         status: Object
           .keys(deviceStatuses)
           .find(key => (deviceStatuses[key] === 'SERVICE_IN_PROGRESS')),
       });
-
-      return ctx.send(200, updDevice);
+      // FIXME: send updated device
+      return ctx.send(200);
     } catch (error) {
       throw new errors.ServerError('Error in starting service for device', error);
     }
@@ -36,22 +36,25 @@ const ServiceController = {
     const prevServices = await ServiceProvider.getDevicePrevServices(deviceId);
     if (!prevServices || !prevServices.length) return 0;
 
-    const hoursBefore = prevServices
-      .reduce((prevHoursSum, curService) => prevHoursSum + curService.hours, 0);
+    // eslint-disable-next-line prefer-spread
+    const maxId = Math.max.apply(Math, prevServices.map(service => service.id));
 
-    const minutesBefore = prevServices
-      .reduce((prevMinutesSum, curService) => prevMinutesSum + curService.hours, 0);
+    const service = prevServices.find((prevService => prevService.id === maxId));
 
-    return hoursBefore + minutesBefore / 60;
+    return service.workHoursGeneral;
   },
   getTrackerStatuses: async (deviceId) => {
     const sectors = await SectorProvider.findAllByParams({ deviceId });
-    return Promise.all(sectors.map(({ id }) => TrackerStatusProvider.findOne({ sectorId: id })));
+
+    return Promise
+      .all(sectors
+        .map(async ({ id }) => TrackerStatusProvider.checkIfExists(id)));
   },
   getCriticalSituationsCount: async (deviceId) => {
-    const trackerStatuses = this.getTrackerStatuses(deviceId);
+    const trackerStatuses = await ServiceController.getTrackerStatuses(deviceId);
+
     const criticalCount = trackerStatuses
-      .reduce((prevCount, curStatus) => prevCount + curStatus.criticalSituationsCount, 0);
+      .reduce((prevCount, curStatus) => prevCount + curStatus.criticalCount, 0);
 
     return criticalCount;
   },
@@ -67,19 +70,22 @@ const ServiceController = {
           .keys(deviceStatuses)
           .find(key => (deviceStatuses[key] === 'SERVICE_OK')),
       });
-
-      // const workHoursAfterService = this.getWorkHoursAfterService(deviceId);
-      // const workHoursGeneral = this.getWorkHoursGeneral(deviceId) + workHoursAfterService;
-      // const criticalSituationsCount = this.getCriticalSituationsCount(deviceId);
+      // FIXME: get max hours by device sectors
+      const workHoursAfterService = await ServiceController.getWorkHoursAfterService(deviceId);
+      const workHoursGeneral = await ServiceController.getWorkHoursGeneral(deviceId) + workHoursAfterService;
+      const criticalCount = await ServiceController.getCriticalSituationsCount(deviceId);
       // const sectorsAvgTemperatures = {};
 
-      await ServiceProvider.create(deviceId, {
-        workHoursAfterService: 0,
-        workHoursGeneral: 0,
-        criticalCount: 0,
+      const service = await ServiceProvider.create(deviceId, {
+        workHoursAfterService,
+        workHoursGeneral,
+        criticalCount,
         sectorsAvgTemp: 0,
       });
+
+      return ctx.send(200, service);
     } catch (error) {
+      console.log('=====', error);
       throw new errors.ServerError('Error in stoping service for device', error);
     }
   },

@@ -62,6 +62,44 @@ const SectorController = {
 
     return ctx.send(200, sectors);
   },
+  setSectorCriticalStatus: async (sectorId, sectorStatus) => {
+    if (sectorStatus !== 'CRITICAL_SITUATION') {
+      await SectorProvider.update(sectorId, {
+        status: Object
+          .keys(sectorStatuses)
+          .find(key => sectorStatuses[key] === 'CRITICAL_SITUATION'),
+      });
+    }
+  },
+  setDeviceCriticalStatus: async (deviceId) => {
+    const device = await DeviceProvider.checkIfExists(deviceId);
+    if (!device) throw new errors.ClientError(`No device with such id: ${deviceId}`);
+
+    const curDeviceStatus = deviceStatuses[device.status];
+
+    if (curDeviceStatus !== 'CRITICAL_SITUATION') {
+      return DeviceProvider.update(deviceId, {
+        status: Object
+          .keys(deviceStatuses)
+          .find(key => deviceStatuses[key] === 'CRITICAL_SITUATION'),
+      });
+    }
+
+    return device;
+  },
+  increaseCriticalCount: async (sectorId, timeExcess, sectorStatus) => {
+    const trackerStatus = await TrackerStatusProvider.checkIfExists(sectorId);
+    if (!trackerStatus) throw new errors.ClientError(`No trackerStatus with such id: ${trackerStatus.id}`);
+
+    const { criticalCount } = trackerStatus;
+
+    return TrackerStatusProvider.update(sectorId, {
+      timeExcess,
+      criticalCount: (sectorStatus !== 'CRITICAL_SITUATION')
+        ? criticalCount + 1
+        : criticalCount,
+    });
+  },
   setCriticalSituation: async (ctx) => {
     const { uuid } = ctx.params;
     const { timeExcess } = ctx.request.body;
@@ -69,38 +107,18 @@ const SectorController = {
     const sector = await SectorProvider.checkIfExists({ uuid });
     if (!sector) throw new errors.ClientError(`No sector with such uuid: ${uuid}`);
 
-    const { id, deviceId } = sector;
+    const curSectorStatus = sectorStatuses[sector.status];
 
-    const updSector = await SectorProvider.update(id, {
-      status: Object
-        .keys(sectorStatuses)
-        .find(key => sectorStatuses[key] === 'CRITICAL_SITUATION'),
-    });
+    try {
+      await SectorController.increaseCriticalCount(sector.id, timeExcess, curSectorStatus);
 
-    const device = await DeviceProvider.checkIfExists(deviceId);
-    if (!device) throw new errors.ClientError(`No device with such id: ${deviceId}`);
+      await SectorController.setSectorCriticalStatus(sector.id, curSectorStatus);
+      await SectorController.setDeviceCriticalStatus(sector.deviceId);
 
-    const updDevice = await DeviceProvider.update(deviceId, {
-      status: Object
-        .keys(deviceStatuses)
-        .find(key => deviceStatuses[key] === 'CRITICAL_SITUATION'),
-    });
-
-    const trackerStatus = await TrackerStatusProvider.checkIfExists(id);
-    if (!trackerStatus) throw new errors.ClientError(`No trackerStatus with such id: ${trackerStatus.id}`);
-
-    // FIXME: remove !== 2 comparison
-
-    const updTrackerStatus = await TrackerStatusProvider.update(id, {
-      timeExcess,
-      criticalSituationsCount: (updSector.status !== 2)
-        ? trackerStatus + 1
-        : trackerStatus,
-    });
-
-    if (!updDevice || !updSector || !updTrackerStatus) throw new errors.ServerError(`Unable to set critical for deviceId: ${deviceId}, sectorId: ${id}`);
-
-    return ctx.send(200);
+      return ctx.send(200);
+    } catch (error) {
+      throw new errors.ServerError(`Unable to set critical for sector uuid: ${uuid}`);
+    }
   },
   updateCurrentTemperatures: async (ctx) => {
     const { sectorTemperatures } = ctx.request.body;

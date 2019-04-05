@@ -18,4 +18,15 @@ serviceRouter.route({
   handler: ServiceController.startService,
 });
 
+serviceRouter.route({
+  method: 'post',
+  path: '/:deviceId/stop',
+  validate: {
+    params: {
+      deviceId: Joi.string().required(),
+    },
+  },
+  handler: ServiceController.stopService,
+});
+
 module.exports = serviceRouter;

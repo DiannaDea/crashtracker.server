@@ -1,11 +1,12 @@
-const { Service } = require('../models/service');
+const { Service } = require('../models');
 
 const ServiceProvider = {
   create: (deviceId, serviceParams) => Service.create({
+    date: new Date(),
     deviceId,
     ...serviceParams,
   }),
-  getDevicePrevServices: deviceId => Service.find({
+  getDevicePrevServices: deviceId => Service.findAll({
     where: {
       deviceId,
     },

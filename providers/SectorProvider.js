@@ -38,6 +38,11 @@ const SectorProvider = {
       ...sectorParams,
     },
   }),
+  findAll: async sectorParams => SectorTracker.findAll({
+    where: {
+      ...sectorParams,
+    },
+  }),
   findAllByParams: async (sectorParams) => {
     const sectors = await SectorTracker.findAll({
       where: {
