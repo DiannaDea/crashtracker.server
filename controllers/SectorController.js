@@ -126,9 +126,12 @@ const SectorController = {
     try {
       await Promise.all(sectorTemperatures.map(async ({ uuid, currentTemp }) => {
         const sector = await SectorProvider.checkIfExists({ uuid });
-        if (sector) {
+        const sectorTracker = await TrackerStatusProvider.checkIfExists(sector.id);
+
+        if (sector && sectorTracker) {
           await TrackerStatusProvider.update(sector.id, {
             currentTemp,
+            avgTemperature: (currentTemp + sectorTracker.avgTemperature) / 2,
             ...(currentTemp < sector.maxTemperature) && { timeExcess: 0 },
           });
         }

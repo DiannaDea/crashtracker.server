@@ -52,11 +52,15 @@ const ServiceController = {
   },
   getCriticalSituationsCount: async (deviceId) => {
     const trackerStatuses = await ServiceController.getTrackerStatuses(deviceId);
-
-    const criticalCount = trackerStatuses
+    return trackerStatuses
       .reduce((prevCount, curStatus) => prevCount + curStatus.criticalCount, 0);
+  },
+  getSectorsAvgTemp: async (deviceId) => {
+    const trackerStatuses = await ServiceController.getTrackerStatuses(deviceId);
+    const avgTempSum = trackerStatuses
+      .reduce((prevAvg, curStatus) => prevAvg + curStatus.avgTemperature, 0);
 
-    return criticalCount;
+    return avgTempSum / trackerStatuses.length;
   },
   stopService: async (ctx) => {
     const { deviceId } = ctx.params;
@@ -70,23 +74,23 @@ const ServiceController = {
           .keys(deviceStatuses)
           .find(key => (deviceStatuses[key] === 'SERVICE_OK')),
       });
+
       // FIXME: get max hours by device sectors
       const workHoursAfterService = await ServiceController.getWorkHoursAfterService(deviceId);
-      const workHoursGeneral = await ServiceController.getWorkHoursGeneral(deviceId) + workHoursAfterService;
+      const workHoursGeneral = await ServiceController.getWorkHoursGeneral(deviceId);
       const criticalCount = await ServiceController.getCriticalSituationsCount(deviceId);
-      // const sectorsAvgTemperatures = {};
+      const sectorsAvgTemp = await ServiceController.getSectorsAvgTemp(deviceId);
 
       const service = await ServiceProvider.create(deviceId, {
         workHoursAfterService,
-        workHoursGeneral,
+        workHoursGeneral: workHoursGeneral + workHoursAfterService,
         criticalCount,
-        sectorsAvgTemp: 0,
+        sectorsAvgTemp,
       });
 
       return ctx.send(200, service);
     } catch (error) {
-      console.log('=====', error);
-      throw new errors.ServerError('Error in stoping service for device', error);
+      throw new errors.ServerError(`Error in stoping service for device, error: ${error.message}`);
     }
   },
 };

@@ -29,7 +29,7 @@ module.exports = {
       defaultValue: 0,
     },
     avgTemperature: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.FLOAT,
       allowNull: false,
       defaultValue: 0,
     },
