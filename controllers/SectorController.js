@@ -124,15 +124,26 @@ const SectorController = {
     const { sectorTemperatures } = ctx.request.body;
 
     try {
-      await Promise.all(sectorTemperatures.map(async ({ uuid, currentTemp }) => {
+      await Promise.all(sectorTemperatures.map(async ({ uuid, currentTemp, minutesWork }) => {
         const sector = await SectorProvider.checkIfExists({ uuid });
-        const sectorTracker = await TrackerStatusProvider.checkIfExists(sector.id);
+        const trackerStatus = await TrackerStatusProvider.checkIfExists(sector.id);
 
-        if (sector && sectorTracker) {
+        const workTime = (trackerStatus.minutes + minutesWork >= 60)
+          ? {
+            hours: trackerStatus.hours + 1,
+            minutes: trackerStatus.minutes + minutesWork - 60,
+          }
+          : {
+            hours: trackerStatus.hours,
+            minutes: trackerStatus.minutes + minutesWork,
+          };
+
+        if (sector && trackerStatus) {
           await TrackerStatusProvider.update(sector.id, {
             currentTemp,
-            avgTemperature: (currentTemp + sectorTracker.avgTemperature) / 2,
+            avgTemperature: (currentTemp + trackerStatus.avgTemperature) / 2,
             ...(currentTemp < sector.maxTemperature) && { timeExcess: 0 },
+            ...workTime,
           });
         }
       }));
@@ -143,7 +154,6 @@ const SectorController = {
   },
   changeToService: async (ctx) => {
     const { uuid } = ctx.params;
-    const { hours, minutes } = ctx.request.body;
 
     const sector = await SectorProvider.checkIfExists({ uuid });
     if (!sector) throw new errors.ClientError(`No sector with such uuid: ${uuid}`);
@@ -151,6 +161,8 @@ const SectorController = {
     const device = await DeviceProvider.checkIfExists(sector.deviceId);
     if (!device) throw new errors.ClientError(`No device with such id: ${sector.deviceId}`);
     const { serviceInterval } = device;
+
+    const [{ hours, minutes }] = (await DeviceProvider.getMaxWorkHoursBySector(device.id))[0];
 
     try {
       const status = (hours > serviceInterval)

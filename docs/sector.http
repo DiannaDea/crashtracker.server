@@ -52,24 +52,19 @@ Content-Type: application/json
   "sectorTemperatures": [
     {
       "uuid": "31708d9a-4b3a-415d-9487-7f6e253b6aa1",
-      "currentTemp": 200
+      "currentTemp": 200,
+      "minutesWork": 42
     },
     {
       "uuid": "a1192bdf-c2ca-4182-baf6-e817e0f8c9ab",
-      "currentTemp": 400
+      "currentTemp": 400,
+       "minutesWork": 42
     }
   ]
 }
 
 ### set service
-POST http://localhost:8000/api/sectors/a1192bdf-c2ca-4182-baf6-e817e0f8c9ab/service
+PUT http://localhost:8000/api/sectors/a1192bdf-c2ca-4182-baf6-e817e0f8c9ab/service
 Content-Type: application/json
-
-{
-  "hours": 200,
-  "minutes": 17
-}
-
-
 
 

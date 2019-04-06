@@ -33,6 +33,16 @@ module.exports = {
       allowNull: false,
       defaultValue: 0,
     },
+    hours: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    minutes: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE,

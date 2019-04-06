@@ -20,6 +20,16 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: 0,
     },
+    hours: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    minutes: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
   }, {});
   TrackerStatus.associate = (models) => {
     models.TrackerStatus.belongsTo(models.SectorTracker, {

@@ -1,6 +1,6 @@
 const uuid = require('node-uuid');
 
-const { Device } = require('../models');
+const { Device, sequelize } = require('../models');
 const { deviceStatuses } = require('../consts/enums');
 
 const DeviceProvider = {
@@ -25,6 +25,15 @@ const DeviceProvider = {
   update: (deviceId, updParams) => Device.update(updParams, {
     where: { id: deviceId },
   }),
+  getMaxWorkHoursBySector: deviceId => sequelize
+    .query(`select hours, minutes from "SectorTrackers" s
+            join "TrackerStatuses" ts on s.id = ts."sectorId"
+            where "deviceId" = '${deviceId}'
+            and "hours" = (
+              select max(hours) from "SectorTrackers" s
+              join "TrackerStatuses" ts on s.id = ts."sectorId"
+              where "deviceId" = '${deviceId}'
+            )`),
 };
 
 module.exports = DeviceProvider;

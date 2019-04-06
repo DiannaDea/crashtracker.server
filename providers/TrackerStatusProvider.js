@@ -7,6 +7,8 @@ const TrackerStatusProvider = {
     timeExcess: 0,
     criticalCount: 0,
     avgTemperature: 0,
+    hours: 0,
+    minutes: 0,
   }),
   update: (sectorId, updParams) => TrackerStatus.update(updParams, {
     where: { sectorId },

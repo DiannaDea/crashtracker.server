@@ -22,15 +22,11 @@ sectorTrackerRouter.route({
 });
 
 sectorTrackerRouter.route({
-  method: 'post',
+  method: 'put',
   path: '/:uuid/service',
   validate: {
     params: {
       uuid: Joi.string().required(),
-    },
-    body: {
-      hours: Joi.number().required(),
-      minutes: Joi.number().required(),
     },
     type: 'json',
   },
@@ -84,6 +80,7 @@ sectorTrackerRouter.route({
       sectorTemperatures: Joi.array().items(Joi.object({
         uuid: Joi.string().required(),
         currentTemp: Joi.number().required(),
+        minutesWork: Joi.number().required(),
       })),
     },
     type: 'json',
