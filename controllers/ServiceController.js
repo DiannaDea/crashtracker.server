@@ -62,6 +62,24 @@ const ServiceController = {
 
     return avgTempSum / trackerStatuses.length;
   },
+  clearAllServiceData: async (deviceId) => {
+    await DeviceStatusProvider.update(deviceId, {
+      hours: 0,
+      minutes: 0,
+    });
+    const trackerStatuses = await ServiceController.getTrackerStatuses(deviceId);
+
+    await Promise.all(trackerStatuses.map(async (trackerStatus) => {
+      await TrackerStatusProvider.update(trackerStatus.sectorId, {
+        currentTemp: 0,
+        avgTemperature: 0,
+        hours: 0,
+        minutes: 0,
+        timeExcess: 0,
+        criticalCount: 0,
+      });
+    }));
+  },
   stopService: async (ctx) => {
     const { deviceId } = ctx.params;
 
@@ -87,6 +105,8 @@ const ServiceController = {
         criticalCount,
         sectorsAvgTemp,
       });
+
+      await ServiceController.clearAllServiceData(deviceId);
 
       return ctx.send(200, service);
     } catch (error) {
