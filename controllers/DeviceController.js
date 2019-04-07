@@ -35,7 +35,7 @@ const DeviceController = {
     const device = await DeviceProvider.checkIfExists(id);
     if (!device) throw new errors.ClientError(`No device with such id: ${id}`);
 
-    const sectors = await SectorProvider.findAllByParams({ deviceId: id });
+    const sectors = await SectorProvider.findAllByParams({ deviceId: id }, device.serviceInterval);
     if (!sectors || !sectors.length) throw new errors.ClientError(`No sectors for device with id: ${id}`);
 
     return ctx.send(200, sectors);

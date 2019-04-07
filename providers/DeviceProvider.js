@@ -34,6 +34,13 @@ const DeviceProvider = {
               join "TrackerStatuses" ts on s.id = ts."sectorId"
               where "deviceId" = '${deviceId}'
             )`),
+  getLastServiceDate: deviceId => sequelize
+    .query(`select * from "Services" 
+            where "deviceId" = '${deviceId}'
+            and "date" = (
+              select max("date") from "Services" 
+              where "deviceId" = '${deviceId}'
+            )`),
 };
 
 module.exports = DeviceProvider;
