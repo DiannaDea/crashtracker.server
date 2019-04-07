@@ -38,7 +38,7 @@ const SectorController = {
     return ctx.send(200, sector);
   },
   getWorkDetails: async (ctx) => {
-    const sectors = await SectorProvider.findAllByParams();
+    const sectors = await SectorProvider.findAll();
     if (!sectors || !sectors.length) throw new errors.ClientError('No sectors');
 
     const workDetails = await Promise.all(sectors.map(async (sector) => {

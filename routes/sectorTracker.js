@@ -57,12 +57,6 @@ sectorTrackerRouter.route({
 
 sectorTrackerRouter.route({
   method: 'get',
-  path: '/',
-  handler: SectorController.getWorkDetails,
-});
-
-sectorTrackerRouter.route({
-  method: 'get',
   path: '/:id',
   validate: {
     params: {
@@ -70,6 +64,12 @@ sectorTrackerRouter.route({
     },
   },
   handler: SectorController.getOne,
+});
+
+sectorTrackerRouter.route({
+  method: 'get',
+  path: '/',
+  handler: SectorController.getWorkDetails,
 });
 
 sectorTrackerRouter.route({
