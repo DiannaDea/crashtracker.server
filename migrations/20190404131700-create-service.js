@@ -15,25 +15,33 @@ module.exports = {
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL',
     },
-    date: {
+    dateStart: {
       type: Sequelize.DATEONLY,
       allowNull: false,
+      defaultValue: Sequelize.NOW,
+    },
+    dateEnd: {
+      type: Sequelize.DATEONLY,
     },
     workHoursAfterService: {
       type: Sequelize.INTEGER,
       allowNull: false,
+      defaultValue: 0,
     },
     workHoursGeneral: {
       type: Sequelize.INTEGER,
       allowNull: false,
+      defaultValue: 0,
     },
     criticalCount: {
       type: Sequelize.INTEGER,
       allowNull: false,
+      defaultValue: 0,
     },
     sectorsAvgTemp: {
       type: Sequelize.FLOAT,
       allowNull: false,
+      defaultValue: 0,
     },
     createdAt: {
       allowNull: false,

@@ -6,6 +6,7 @@ const ServiceProvider = {
     deviceId,
     ...serviceParams,
   }),
+  update: (searchParams, updateParams) => Service.update(updateParams, { where: searchParams }),
   getDevicePrevServices: deviceId => Service.findAll({
     where: {
       deviceId,

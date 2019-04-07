@@ -20,8 +20,12 @@ const ServiceController = {
           .keys(deviceStatuses)
           .find(key => (deviceStatuses[key] === 'SERVICE_IN_PROGRESS')),
       });
-      // FIXME: send updated device
-      return ctx.send(200);
+
+      const service = await ServiceProvider.create(deviceId, {
+        dateStart: Date.now(),
+      });
+
+      return ctx.send(200, service);
     } catch (error) {
       throw new errors.ServerError('Error in starting service for device', error);
     }
@@ -99,7 +103,11 @@ const ServiceController = {
       const criticalCount = await ServiceController.getCriticalSituationsCount(deviceId);
       const sectorsAvgTemp = await ServiceController.getSectorsAvgTemp(deviceId);
 
-      const service = await ServiceProvider.create(deviceId, {
+      await ServiceProvider.update({
+        deviceId,
+        dateEnd: null,
+      }, {
+        dateEnd: Date.now(),
         workHoursAfterService,
         workHoursGeneral: workHoursGeneral + workHoursAfterService,
         criticalCount,
@@ -108,7 +116,7 @@ const ServiceController = {
 
       await ServiceController.clearAllServiceData(deviceId);
 
-      return ctx.send(200, service);
+      return ctx.send(200);
     } catch (error) {
       throw new errors.ServerError(`Error in stoping service for device, error: ${error.message}`);
     }
