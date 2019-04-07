@@ -62,7 +62,7 @@ const SectorProvider = {
       const hoursDiff = serviceInterval - hours;
       const nextServiceDate = (hoursDiff >= 0)
         ? moment().add(hoursDiff, 'h').subtract(minutes, 'm')
-        : moment().subtract(hoursDiff * -1, 'h').subtract(minutes, 'm')
+        : moment().subtract(hoursDiff * -1, 'h').subtract(minutes, 'm');
 
       return {
         ...omit(sector.dataValues, ['status']),
