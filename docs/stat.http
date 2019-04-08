@@ -1,0 +1,2 @@
+### get device services
+GET http://localhost:8000/api/statistics/8bcea6c3-c7a6-4ea5-9b70-084743801ab2/service
