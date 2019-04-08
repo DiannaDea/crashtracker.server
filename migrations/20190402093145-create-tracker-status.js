@@ -33,6 +33,16 @@ module.exports = {
       allowNull: false,
       defaultValue: 0,
     },
+    maxTemperature: {
+      type: Sequelize.FLOAT,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    minTemperature: {
+      type: Sequelize.FLOAT,
+      allowNull: false,
+      defaultValue: 0,
+    },
     hours: {
       type: Sequelize.INTEGER,
       allowNull: false,

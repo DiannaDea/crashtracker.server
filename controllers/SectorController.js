@@ -142,6 +142,8 @@ const SectorController = {
           await TrackerStatusProvider.update(sector.id, {
             currentTemp,
             avgTemperature: (currentTemp + trackerStatus.avgTemperature) / 2,
+            maxTemperature: Math.max(trackerStatus.maxTemperature, currentTemp),
+            minTemperature: Math.min(trackerStatus.maxTemperature, currentTemp),
             ...(currentTemp < sector.maxTemperature) && { timeExcess: 0 },
             ...workTime,
           });
