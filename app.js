@@ -8,7 +8,6 @@ const errorHandler = require('./utils/errorHandler.js');
 const app = new Koa();
 
 require('./services/postgresConnection');
-require('./services/mongoConnection');
 
 app.use(errorHandler);
 app.use(respond());
