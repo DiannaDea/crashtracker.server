@@ -21,7 +21,15 @@ const SectorController = {
             const sectorInfo = await SectorProvider.create({ deviceId, ...sector });
             await TrackerStatusProvider.create(sectorInfo.id);
 
-            return sectorInfo;
+            return {
+              ...sectorInfo.dataValues,
+              status: {
+                currentTemp: 0,
+                name: 'OK',
+                number: 1,
+                timeExcess: 0,
+              },
+            };
           }));
 
       return ctx.send(200, sectors);
