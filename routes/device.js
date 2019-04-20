@@ -49,4 +49,15 @@ deviceRouter.route({
   handler: DeviceController.getOne,
 });
 
+deviceRouter.route({
+  method: 'delete',
+  path: '/:id',
+  validate: {
+    params: {
+      id: Joi.string().required(),
+    },
+  },
+  handler: DeviceController.deleteDevice,
+});
+
 module.exports = deviceRouter;

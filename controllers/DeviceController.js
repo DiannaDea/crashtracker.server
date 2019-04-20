@@ -2,6 +2,7 @@ const DeviceProvider = require('../providers/DeviceProvider');
 const DeviceStatusProvider = require('../providers/DeviceStatusProvider');
 const UserProvider = require('../providers/UserProvider');
 const SectorProvider = require('../providers/SectorProvider');
+const TrackerStatusProvider = require('../providers/TrackerStatusProvider');
 const errors = require('../consts/customErrors.js');
 
 const DeviceController = {
@@ -39,6 +40,35 @@ const DeviceController = {
     if (!sectors || !sectors.length) ctx.send(204);
 
     return ctx.send(200, sectors);
+  },
+  deleteDevice: async (ctx) => {
+    const { id } = ctx.params;
+
+    const device = await DeviceProvider.checkIfExists(id);
+    if (!device) throw new errors.ClientError(`No device with such id: ${id}`);
+
+    const deviceStatus = await DeviceStatusProvider.checkIfExists(id);
+
+    try {
+      const sectors = await SectorProvider.findAll({ deviceId: id });
+
+      await Promise.all(sectors.map(async (sector) => {
+        const trackerStatus = await TrackerStatusProvider.checkIfExists(sector.id);
+
+        if (trackerStatus) {
+          await trackerStatus.destroy({ force: true });
+        }
+
+        await sector.destroy({ force: true });
+      }));
+
+      await deviceStatus.destroy({ force: true });
+      await device.destroy({ force: true });
+
+      ctx.send(200);
+    } catch (error) {
+      throw new errors.ServerError(error.message);
+    }
   },
 };
 

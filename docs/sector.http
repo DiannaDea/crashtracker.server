@@ -67,4 +67,7 @@ Content-Type: application/json
 PUT http://localhost:8000/api/sectors/a1192bdf-c2ca-4182-baf6-e817e0f8c9ab/service
 Content-Type: application/json
 
+### delete sector
+DELETE  http://localhost:8000/api/sectors/9683c21c-a34d-4fbd-9907-ae5fa841169f
+
 

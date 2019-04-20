@@ -88,4 +88,15 @@ sectorTrackerRouter.route({
   handler: SectorController.updateCurrentTemperatures,
 });
 
+sectorTrackerRouter.route({
+  method: 'delete',
+  path: '/:id',
+  validate: {
+    params: {
+      id: Joi.string().required(),
+    },
+  },
+  handler: SectorController.deleteSector,
+});
+
 module.exports = sectorTrackerRouter;

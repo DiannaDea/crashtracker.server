@@ -191,6 +191,25 @@ const SectorController = {
       throw new errors.ServerError('Error in setting service for device', error);
     }
   },
+  deleteSector: async (ctx) => {
+    const { id } = ctx.params;
+
+    const sector = await SectorProvider.checkIfExists({ id });
+    if (!sector) throw new errors.ClientError(`No sector with such id: ${id}`);
+
+    const trackerStatus = await TrackerStatusProvider.checkIfExists(sector.id);
+
+    try {
+      if (trackerStatus) {
+        await trackerStatus.destroy({ force: true });
+      }
+
+      await sector.destroy({ force: true });
+      return ctx.send(200);
+    } catch (error) {
+      throw new errors.ServerError(error.message);
+    }
+  },
 };
 
 module.exports = SectorController;
