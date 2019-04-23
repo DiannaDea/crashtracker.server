@@ -1,5 +1,5 @@
 ### get device services
-GET http://localhost:8000/api/statistics/8bcea6c3-c7a6-4ea5-9b70-084743801ab2/service
+GET http://localhost:8000/api/statistics/c004e5ad-dbb4-4a9a-9025-233988cab670/service
 
 ### get sectors statistics
-GET http://localhost:8000/api/statistics/8bcea6c3-c7a6-4ea5-9b70-084743801ab3/sectors
+GET http://localhost:8000/api/statistics/c004e5ad-dbb4-4a9a-9025-233988cab670/sectors

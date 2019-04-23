@@ -12,6 +12,7 @@
         "password": "POSTGRES_DB_PASSWORD"
     },
     "token": {
-        "secret": "TOKEN_SECRET"
+        "secret": "TOKEN_SECRET",
+        "expiresIn": "EXPIRES_IN"
     }
 }
