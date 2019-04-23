@@ -4,6 +4,15 @@ const errors = require('../consts/customErrors');
 const { deviceStatuses } = require('../consts/enums');
 
 const UserController = {
+  getUser: async (ctx) => {
+    const { email } = ctx.params;
+
+    const user = await UserProvider.checkIfExistsByEmail(email);
+
+    return (user)
+      ? ctx.send(200, user)
+      : ctx.send(500, 'Unable to create user');
+  },
   getAllDevices: async (ctx) => {
     const { id } = ctx.params;
 

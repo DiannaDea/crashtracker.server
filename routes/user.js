@@ -18,4 +18,15 @@ userRouter.route({
   handler: UserController.getAllDevices,
 });
 
+userRouter.route({
+  method: 'get',
+  path: '/:email',
+  validate: {
+    params: {
+      email: Joi.string().required(),
+    },
+  },
+  handler: UserController.getUser,
+});
+
 module.exports = userRouter;
