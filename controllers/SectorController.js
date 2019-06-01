@@ -205,7 +205,7 @@ const SectorController = {
       }
 
       await sector.destroy({ force: true });
-      return ctx.send(200);
+      return ctx.send(200, { success: true });
     } catch (error) {
       throw new errors.ServerError(error.message);
     }

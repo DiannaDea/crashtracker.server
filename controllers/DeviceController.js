@@ -65,7 +65,7 @@ const DeviceController = {
       await deviceStatus.destroy({ force: true });
       await device.destroy({ force: true });
 
-      ctx.send(200);
+      ctx.send(200, { success: true });
     } catch (error) {
       throw new errors.ServerError(error.message);
     }
