@@ -37,7 +37,7 @@ const UserController = {
         : moment().subtract(hoursDiff * -1, 'h').subtract(minutes, 'm');
       return {
         ...device.dataValues,
-        dateNextService,
+        dateNextService: (dateNextService) ? dateNextService.format('YYYY-MM-DD') : 'N/A',
         status: {
           code: device.status,
           name: deviceStatuses[device.status],
